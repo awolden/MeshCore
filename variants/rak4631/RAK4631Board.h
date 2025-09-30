@@ -26,6 +26,7 @@
 
 // built-ins
 #define  PIN_VBAT_READ    5
+#define  VBAT_AIN_INPUT   NRF_LPCOMP_INPUT_0  // Must match PIN_VBAT_READ (P0.05 = AIN0)
 #define  ADC_MULTIPLIER   (3 * 1.73 * 1.187 * 1000)
 
 class RAK4631Board : public mesh::MainBoard {

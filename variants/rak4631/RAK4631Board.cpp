@@ -3,6 +3,11 @@
 
 #include <bluefruit.h>
 #include <Wire.h>
+#include <nrf_lpcomp.h>
+
+#define BAT_THRESHOLD NRF_LPCOMP_REF_SUPPLY_11_16
+#define BAT_COMP_INPUT VBAT_AIN_INPUT
+#define BAT_CUTOFF_VOLTAGE 3000
 
 static BLEDfu bledfu;
 
@@ -21,6 +26,20 @@ static void disconnect_callback(uint16_t conn_handle, uint8_t reason) {
 void RAK4631Board::begin() {
   // for future use, sub-classes SHOULD call this from their begin()
   startup_reason = BD_STARTUP_NORMAL;
+
+  // Brownout protection: if battery is critically low, configure the low-power comparator
+  // to wake the device when voltage rises above threshold, then enter system off mode
+  if (getBattMilliVolts() < BAT_CUTOFF_VOLTAGE) {
+    nrf_lpcomp_config_t comp_cfg;
+    comp_cfg.reference = BAT_THRESHOLD;
+    comp_cfg.detection = NRF_LPCOMP_DETECT_UP;
+    comp_cfg.hyst = NRF_LPCOMP_HYST_NOHYST;
+    nrf_lpcomp_configure(NRF_LPCOMP, &comp_cfg);
+    nrf_lpcomp_input_select(NRF_LPCOMP, BAT_COMP_INPUT);
+    nrf_lpcomp_enable(NRF_LPCOMP);
+    sd_power_system_off();
+  }
+
   pinMode(PIN_VBAT_READ, INPUT);
 #ifdef PIN_USER_BTN
   pinMode(PIN_USER_BTN, INPUT_PULLUP);
