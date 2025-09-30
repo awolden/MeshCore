@@ -107,6 +107,7 @@ void loop() {
 
   the_mesh.loop();
   sensors.loop();
+  if (power_mgr) power_mgr->loop();
 #ifdef DISPLAY_CLASS
   ui_task.loop();
 #endif

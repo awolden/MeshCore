@@ -25,9 +25,10 @@
 #define SX126X_DIO3_TCXO_VOLTAGE   1.8
 
 // built-ins
-#define  PIN_VBAT_READ    5
-#define  VBAT_AIN_INPUT   NRF_LPCOMP_INPUT_0  // Must match PIN_VBAT_READ (P0.05 = AIN0)
-#define  ADC_MULTIPLIER   (3 * 1.73 * 1.187 * 1000)
+#define  PIN_VBAT_READ   5
+#define  VBAT_AIN_INPUT   NRF_LPCOMP_INPUT_0  // Must match PIN_VBAT_READ (pin 5 = A0 = AIN0)
+#define  ADC_MULTIPLIER   (3 * 1.73 * 1.187 * 1000)  // Standard RAK4631 multiplier
+#define  VBAT_LPCOMP_THRESHOLD  NRF_LPCOMP_REF_SUPPLY_3_16  // 3/16 * 3.3V = 0.619V at pin ≈ 3.5-3.8V battery
 
 class RAK4631Board : public mesh::MainBoard {
 protected:
@@ -47,7 +48,6 @@ public:
       raw += analogRead(PIN_VBAT_READ);
     }
     raw = raw / BATTERY_SAMPLES;
-
     return (ADC_MULTIPLIER * raw) / 4096;
   }
 

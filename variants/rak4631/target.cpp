@@ -1,8 +1,12 @@
 #include <Arduino.h>
 #include "target.h"
 #include <helpers/ArduinoHelpers.h>
+#include <helpers/nrf52/NRF52PowerManager.h>
 
 RAK4631Board board;
+
+mesh::NRF52PowerManager _power_mgr(&board, 3100, VBAT_LPCOMP_THRESHOLD, VBAT_AIN_INPUT);
+mesh::PowerManager* power_mgr = &_power_mgr;
 
 #ifndef PIN_USER_BTN
   #define PIN_USER_BTN (-1)
