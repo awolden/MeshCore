@@ -7,6 +7,9 @@
 #include <helpers/radiolib/CustomSX1262Wrapper.h>
 #include <helpers/AutoDiscoverRTCClock.h>
 #include <helpers/sensors/EnvironmentSensorManager.h>
+#if ENV_INCLUDE_BM6
+#include <helpers/sensors/BM6SensorManager.h>
+#endif
 
 #ifdef DISPLAY_CLASS
   #include <helpers/ui/SSD1306Display.h>
@@ -22,6 +25,9 @@ extern RAK4631Board board;
 extern WRAPPER_CLASS radio_driver;
 extern AutoDiscoverRTCClock rtc_clock;
 extern EnvironmentSensorManager sensors;
+#if ENV_INCLUDE_BM6
+extern BM6SensorManager bm6_sensors;
+#endif
 
 bool radio_init();
 uint32_t radio_get_rng_seed();

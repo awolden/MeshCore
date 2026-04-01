@@ -104,6 +104,15 @@ void setup() {
 
   sensors.begin();
 
+#if ENV_INCLUDE_BM6
+  Bluefruit.configCentralBandwidth(BANDWIDTH_LOW);
+  Bluefruit.configCentralConn(BLE_GATT_ATT_MTU_DEFAULT, BLE_GAP_EVENT_LENGTH_MIN, BLE_GATTS_HVN_TX_QUEUE_SIZE_DEFAULT, BLE_GATTC_WRITE_CMD_TX_QUEUE_SIZE_DEFAULT);
+  Bluefruit.begin(0, 1);
+  Bluefruit.setTxPower(4);
+  Bluefruit.setName("MC-BM6");
+  bm6_sensors.begin();
+#endif
+
   the_mesh.begin(fs);
 
 #ifdef DISPLAY_CLASS
@@ -143,6 +152,9 @@ void loop() {
 
   the_mesh.loop();
   sensors.loop();
+#if ENV_INCLUDE_BM6
+  bm6_sensors.loop();
+#endif
 #ifdef DISPLAY_CLASS
   ui_task.loop();
 #endif

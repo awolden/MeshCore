@@ -180,6 +180,9 @@ uint8_t SensorMesh::handleRequest(uint8_t perms, uint32_t sender_timestamp, uint
     telemetry.addVoltage(TELEM_CHANNEL_SELF, (float)board.getBattMilliVolts() / 1000.0f);
     // query other sensors -- target specific
     sensors.querySensors(0xFF & perm_mask, telemetry);  // allow all telemetry permissions for admin or guest
+#if ENV_INCLUDE_BM6
+    bm6_sensors.querySensors(0xFF & perm_mask, telemetry);
+#endif
     // TODO: let requester know permissions they have:  telemetry.addPresence(TELEM_CHANNEL_SELF, perms);
 
     uint8_t tlen = telemetry.getSize();
@@ -899,6 +902,9 @@ void SensorMesh::loop() {
     telemetry.addVoltage(TELEM_CHANNEL_SELF, (float)board.getBattMilliVolts() / 1000.0f);
     // query other sensors -- target specific
     sensors.querySensors(0xFF, telemetry);  // allow all telemetry permissions
+#if ENV_INCLUDE_BM6
+    bm6_sensors.querySensors(0xFF, telemetry);
+#endif
 
     onSensorDataRead();
 

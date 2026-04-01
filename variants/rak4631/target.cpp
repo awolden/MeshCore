@@ -32,6 +32,10 @@ AutoDiscoverRTCClock rtc_clock(fallback_clock);
   EnvironmentSensorManager sensors;
 #endif
 
+#if ENV_INCLUDE_BM6
+  BM6SensorManager bm6_sensors;
+#endif
+
 bool radio_init() {
   rtc_clock.begin(Wire);
   return radio.std_init(&SPI);
